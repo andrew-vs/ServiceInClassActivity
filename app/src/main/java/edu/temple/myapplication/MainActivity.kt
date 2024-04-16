@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 
 
@@ -41,17 +42,7 @@ class MainActivity : AppCompatActivity() {
             BIND_AUTO_CREATE
         )
 
-        findViewById<Button>(R.id.startButton).setOnClickListener {
-            timerBinder?.start(100, handler)
-        }
 
-        findViewById<Button>(R.id.pauseButton).setOnClickListener {
-            timerBinder?.pause()
-        }
-        
-        findViewById<Button>(R.id.stopButton).setOnClickListener {
-            timerBinder?.stop()
-        }
 
 
     }
@@ -67,5 +58,18 @@ class MainActivity : AppCompatActivity() {
 
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+
+            R.id.action_start -> timerBinder?.start(100, handler)
+
+            R.id.action_pause -> timerBinder?.pause()
+
+            R.id.action_stop -> timerBinder?.stop()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
