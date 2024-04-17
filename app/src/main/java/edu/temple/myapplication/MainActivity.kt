@@ -8,15 +8,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
 
     var timerBinder: TimerService.TimerBinder? = null
 
+    private lateinit var buttonStart: Button
+    private lateinit var editText: EditText
 
     val serviceConnection = object: ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -43,6 +48,27 @@ class MainActivity : AppCompatActivity() {
         )
 
 
+        buttonStart = findViewById(R.id.button)
+
+        editText = findViewById(R.id.editTextText)
+
+
+
+        buttonStart.setOnClickListener{
+            val number = editText.text.toString()
+
+            try{
+
+                timerBinder?.start(number.toInt())
+            }catch(e: Exception){
+                Log.d("error", e.toString())
+            }
+
+
+
+        }
+
+
 
 
     }
@@ -52,24 +78,4 @@ class MainActivity : AppCompatActivity() {
         unbindService(serviceConnection)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        menuInflater.inflate(R.menu.main, menu)
-
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when(item.itemId){
-
-            R.id.action_start -> timerBinder?.start(100, handler)
-
-            R.id.action_pause -> timerBinder?.pause()
-
-            R.id.action_stop -> timerBinder?.stop()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }
